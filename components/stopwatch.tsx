@@ -3,14 +3,15 @@ import type { ComponentType } from "react";
 import { useEffect, useState } from "react";
 import type { TextProps, ViewProps } from "react-native";
 import {
-  Button,
-  Text as NativeText,
-  View as NativeView,
+	Button,
+	Text as NativeText,
+	View as NativeView,
 } from "react-native";
 
 const Text = NativeText as unknown as ComponentType<TextProps>;
 const View = NativeView as unknown as ComponentType<ViewProps>;
 const DISPLAY_HORIZONTAL_PADDING = 20;
+const MONOSPACE_CHARACTER_WIDTH = 0.62;
 
 export type HistoryEntry = {
   type: "start" | "lap" | "pause" | "unpause" | "end";
@@ -20,9 +21,17 @@ export type HistoryEntry = {
 export default function Stopwatch() {
   const [displayTime, setDisplayTime] = useState("0.00");
   const [history, setHistory] = useState<HistoryEntry[]>([]);
-  const [timeFontSize, setTimeFontSize] = useState(96);
   const [displayWidth, setDisplayWidth] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
+  const timeFontSize = displayWidth
+    ? Math.max(
+        12,
+        Math.min(
+          240,
+          displayWidth / (displayTime.length * MONOSPACE_CHARACTER_WIDTH),
+        ),
+      )
+    : 96;
 
   useEffect(() => {
     if (!isRunning) return;
@@ -111,19 +120,6 @@ export default function Stopwatch() {
             textAlign: "center",
           }}
           numberOfLines={1}
-          ellipsizeMode="clip"
-          onTextLayout={(event) => {
-            const lineWidth = event.nativeEvent.lines?.[0]?.width;
-            if (!displayWidth || !lineWidth) return;
-
-            const nextFontSize = Math.max(
-              12,
-              Math.min(240, timeFontSize * displayWidth / lineWidth),
-            );
-            if (Math.abs(nextFontSize - timeFontSize) > 0.5) {
-              setTimeFontSize(nextFontSize);
-            }
-          }}
         >
           {displayTime}
         </Text>
