@@ -1,3 +1,4 @@
+import StopwatchHistory from "@/components/stopwatch_history";
 import type { ComponentType } from "react";
 import { useEffect, useState } from "react";
 import {
@@ -9,7 +10,7 @@ import {
 const Text = NativeText as unknown as ComponentType<any>;
 const View = NativeView as unknown as ComponentType<any>;
 
-type HistoryEntry = {
+export type HistoryEntry = {
   type: "start" | "lap" | "pause" | "unpause" | "end";
   time: Date;
 };
@@ -168,6 +169,8 @@ export default function Stopwatch() {
           </View>
         </View>
       )}
+
+      <StopwatchHistory history={history} />
     </View>
   );
 }
