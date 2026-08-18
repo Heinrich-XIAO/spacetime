@@ -2,13 +2,14 @@ import StopwatchHistory from "@/components/stopwatch_history";
 import type { ComponentType } from "react";
 import { useEffect, useState } from "react";
 import {
-  Button,
-  Text as NativeText,
-  View as NativeView,
+	Button,
+	Text as NativeText,
+	View as NativeView,
 } from "react-native";
+import type { TextProps, ViewProps } from "react-native";
 
-const Text = NativeText as unknown as ComponentType<any>;
-const View = NativeView as unknown as ComponentType<any>;
+const Text = NativeText as unknown as ComponentType<TextProps>;
+const View = NativeView as unknown as ComponentType<ViewProps>;
 
 export type HistoryEntry = {
   type: "start" | "lap" | "pause" | "unpause" | "end";
@@ -90,7 +91,7 @@ export default function Stopwatch() {
 
   return (
     <View
-      onLayout={(event: any) => setContainerWidth(event.nativeEvent.layout.width)}
+      onLayout={(event) => setContainerWidth(event.nativeEvent.layout.width)}
       style={{
         flex: 1,
         width: "100%",
@@ -106,7 +107,7 @@ export default function Stopwatch() {
           textAlign: "center"
         }}
         numberOfLines={1}
-        onTextLayout={(event: any) => {
+        onTextLayout={(event) => {
           const lineWidth = event.nativeEvent.lines?.[0]?.width;
           if (!containerWidth || !lineWidth) return;
 
