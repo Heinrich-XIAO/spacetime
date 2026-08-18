@@ -66,14 +66,42 @@ export default function Stopwatch() {
     <View
       style={{
         flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
+        width: "100%",
       }}
     >
-      <Text>{displayTime}</Text>
-      <Button title="Start" onPress={startStopwatch} />
-      <Button title="Stop" onPress={stopStopwatch} />
-      <Button title="Lap" onPress={lapStopwatch} />
+      <Text
+        style={{
+          fontSize: 96,
+          fontWeight: "bold",
+          fontFamily: "monospace",
+          marginBottom: 20,
+          width: "100%",
+          textAlign: "center"
+        }}
+      >
+        {displayTime}
+      </Text>
+      {isRunning || <Button title="Start" onPress={startStopwatch} />}
+      {isRunning && (
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            width: "100%",
+            paddingHorizontal: 20
+          }}
+        >
+          <Button title="Pause" style={styles.button} onPress={stopStopwatch} />
+          <Button title="Stop" style={styles.button} onPress={stopStopwatch} />
+          <Button title="Lap" style={styles.button} onPress={lapStopwatch} />
+        </View>
+      )}
     </View>
   );
 }
+
+const styles = {
+  button: {
+    width: "100px",
+  },
+};
