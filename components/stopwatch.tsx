@@ -1,15 +1,16 @@
 import StopwatchHistory from "@/components/stopwatch_history";
 import type { ComponentType } from "react";
 import { useEffect, useState } from "react";
-import {
-	Button,
-	Text as NativeText,
-	View as NativeView,
-} from "react-native";
 import type { TextProps, ViewProps } from "react-native";
+import {
+  Button,
+  Text as NativeText,
+  View as NativeView,
+} from "react-native";
 
 const Text = NativeText as unknown as ComponentType<TextProps>;
 const View = NativeView as unknown as ComponentType<ViewProps>;
+const DISPLAY_HORIZONTAL_PADDING = 20;
 
 export type HistoryEntry = {
   type: "start" | "lap" | "pause" | "unpause" | "end";
@@ -20,7 +21,7 @@ export default function Stopwatch() {
   const [displayTime, setDisplayTime] = useState("0.00");
   const [history, setHistory] = useState<HistoryEntry[]>([]);
   const [timeFontSize, setTimeFontSize] = useState(96);
-  const [containerWidth, setContainerWidth] = useState(0);
+  const [displayWidth, setDisplayWidth] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
 
   useEffect(() => {
@@ -90,35 +91,43 @@ export default function Stopwatch() {
   };
 
   return (
-    <View
-      onLayout={(event) => setContainerWidth(event.nativeEvent.layout.width)}
-      style={{
-        flex: 1,
-        width: "100%",
-      }}
-    >
-      <Text
+    <View style={{ flex: 1, width: "100%" }}>
+      <View
+        onLayout={(event) =>
+          setDisplayWidth(event.nativeEvent.layout.width - DISPLAY_HORIZONTAL_PADDING * 2)
+        }
         style={{
-          fontSize: timeFontSize,
-          fontWeight: "bold",
-          fontFamily: "monospace",
-          marginBottom: 20,
           width: "100%",
-          textAlign: "center"
-        }}
-        numberOfLines={1}
-        onTextLayout={(event) => {
-          const lineWidth = event.nativeEvent.lines?.[0]?.width;
-          if (!containerWidth || !lineWidth) return;
-
-          const nextFontSize = Math.max(12, Math.min(240, timeFontSize * containerWidth / lineWidth));
-          if (Math.abs(nextFontSize - timeFontSize) > 0.5) {
-            setTimeFontSize(nextFontSize);
-          }
+          paddingHorizontal: DISPLAY_HORIZONTAL_PADDING,
         }}
       >
-        {displayTime}
-      </Text>
+        <Text
+          style={{
+            fontSize: timeFontSize,
+            fontWeight: "bold",
+            fontFamily: "monospace",
+            marginBottom: 20,
+            width: "100%",
+            textAlign: "center",
+          }}
+          numberOfLines={1}
+          ellipsizeMode="clip"
+          onTextLayout={(event) => {
+            const lineWidth = event.nativeEvent.lines?.[0]?.width;
+            if (!displayWidth || !lineWidth) return;
+
+            const nextFontSize = Math.max(
+              12,
+              Math.min(240, timeFontSize * displayWidth / lineWidth),
+            );
+            if (Math.abs(nextFontSize - timeFontSize) > 0.5) {
+              setTimeFontSize(nextFontSize);
+            }
+          }}
+        >
+          {displayTime}
+        </Text>
+      </View>
       {history.length === 0 && (
         <View
           style={{
