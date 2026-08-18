@@ -14,7 +14,7 @@ const ScrollView = NativeScrollView as unknown as ComponentType<ScrollViewProps>
 export default function StopwatchHistory({ history }: { history: HistoryEntry[] }) {
   return (
     <ScrollView style={{ flex: 1 }}>
-      {history.reverse().map((entry, index) => (
+      {history.toReversed().map((entry, index) => (
         <View key={index} style={{ padding: 10, borderBottomWidth: 1, borderBottomColor: "#ccc" }}>
           <Text>{entry.type.toUpperCase()}</Text>
           <Text>{entry.time.toLocaleString()}</Text>
