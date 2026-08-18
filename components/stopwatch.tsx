@@ -3,9 +3,9 @@ import type { ComponentType } from "react";
 import { useEffect, useState } from "react";
 import type { TextProps, ViewProps } from "react-native";
 import {
-	Button,
-	Text as NativeText,
-	View as NativeView,
+  Button,
+  Text as NativeText,
+  View as NativeView,
 } from "react-native";
 
 const Text = NativeText as unknown as ComponentType<TextProps>;
@@ -168,10 +168,10 @@ export default function Stopwatch() {
             <Button title="Pause" onPress={pauseStopwatch} />
           </View>
           <View style={{ flex: 1 }}>
-            <Button title="End" onPress={endStopwatch} />
+            <Button title="Lap" onPress={lapStopwatch} />
           </View>
           <View style={{ flex: 1 }}>
-            <Button title="Lap" onPress={lapStopwatch} />
+            <Button title="End" onPress={endStopwatch} />
           </View>
         </View>
       )}
