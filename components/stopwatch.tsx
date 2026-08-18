@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
-import { Button, Text, View } from "react-native";
+import type { ComponentType } from "react";
+import { Button, Text as NativeText, View as NativeView } from "react-native";
+
+const Text = NativeText as unknown as ComponentType<any>;
+const View = NativeView as unknown as ComponentType<any>;
 
 type HistoryEntry = {
   type: "start" | "lap" | "pause" | "unpause" | "stop";
@@ -91,17 +95,11 @@ export default function Stopwatch() {
             paddingHorizontal: 20
           }}
         >
-          <Button title="Pause" style={styles.button} onPress={stopStopwatch} />
-          <Button title="Stop" style={styles.button} onPress={stopStopwatch} />
-          <Button title="Lap" style={styles.button} onPress={lapStopwatch} />
+          <Button title="Pause" onPress={stopStopwatch} />
+          <Button title="Stop" onPress={stopStopwatch} />
+          <Button title="Lap" onPress={lapStopwatch} />
         </View>
       )}
     </View>
   );
 }
-
-const styles = {
-  button: {
-    width: "100px",
-  },
-};
